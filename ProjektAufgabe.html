@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Siedetemperatur</title>
+    <script>
+        function berechne() {
+          const temperatur = parseFloat(document.getElementById("temp").value);
+          let hoehe = 0;
+          
+          if (isNaN(temperatur) || temperatur >= 100 || temperatur <= 0) {
+            document.getElementById("ergebnis");
+            return;
+          }
+      
+          if (temperatur < 50) {
+            hoehe = (100 - temperatur) * 400;  
+          }
+          else {
+            if (temperatur < 80) {
+              hoehe = (100 - temperatur) * 300;  
+            }
+            else {
+              hoehe = (100 - temperatur) * 200;  
+            }
+          }
+      
+          document.getElementById("ergebnis").innerHTML = 
+            `Bei einer Siedetemperatur von ${temperatur} °C beträgt die Höhe etwa ${hoehe.toFixed(0)} Meter über dem Meeresspiegel.`;
+        }
+      </script>
+</head>
+<body>
+<h1>Berechnung der Höhe basierend auf der Siedetemperatur</h1>
+ 
+<label for="temp">Siedetemperatur in C:</label>
+<input type="number" id="temp" placeholder="z. B. 90">
+<button onclick="berechne()">Berechnen</button>
+
+<div id="ergebnis"></div>
+
+
+</body>
+</html>
