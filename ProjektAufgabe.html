@@ -1,43 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <title>Siedetemperatur</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
     <script>
+        let hoehe = 0;
+
         function berechne() {
-          const temperatur = parseFloat(document.getElementById("temp").value);
-          let hoehe = 0;
-          
-          if (isNaN(temperatur) || temperatur >= 100 || temperatur <= 0) {
-            document.getElementById("ergebnis");
-            return;
-          }
-      
-          if (temperatur < 50) {
-            hoehe = (100 - temperatur) * 400;  
-          }
-          else {
-            if (temperatur < 80) {
-              hoehe = (100 - temperatur) * 300;  
+            const temperatur = parseFloat(document.getElementById("temp").value);
+            hoehe = 0;
+
+            if (isNaN(temperatur) || temperatur >= 100 || temperatur <= 0) {
+                document.getElementById("ergebnis").innerHTML = "Bitte gültige Temperatur zwischen 0 und 100 eingeben.";
+                return;
             }
-            else {
-              hoehe = (100 - temperatur) * 200;  
+
+            if (temperatur < 50) {
+                hoehe = (100 - temperatur) * 400;
+            } else if (temperatur < 80) {
+                hoehe = (100 - temperatur) * 300;
+            } else {
+                hoehe = (100 - temperatur) * 200;
             }
-          }
-      
-          document.getElementById("ergebnis").innerHTML = 
-            `Bei einer Siedetemperatur von ${temperatur} °C beträgt die Höhe etwa ${hoehe.toFixed(0)} Meter über dem Meeresspiegel.`;
+
+            document.getElementById("ergebnis").innerHTML =
+                `Bei einer Siedetemperatur von ${temperatur} °C beträgt die Höhe ${hoehe.toFixed(0)} Meter über dem Meeresspiegel.`;
         }
-      </script>
+
+        function setup() {
+            createCanvas(400, 500);
+        }
+
+        function draw() {
+            background(240);
+
+            fill(200);
+            triangle(200, 50, 100, 450, 300, 450);
+
+            let armstrongY = map(19000, 0, 32000, 450, 50);
+            stroke('red');
+            strokeWeight(2);
+            line(80, armstrongY, 280, armstrongY);
+
+            noStroke();
+            fill('red');
+            textSize(12);
+            textAlign(LEFT);
+            text("Armstrong-Grenze (19.000 m)", 85, armstrongY - 5);
+
+            let y = map(hoehe, 0, 32000, 450, 50);
+            fill('red');
+            ellipse(200, y, 12, 12);
+
+            fill(0);
+            textAlign(CENTER);
+            text(`${hoehe.toFixed(0)} m`, 200, y - 10);
+        }
+    </script>
 </head>
 <body>
-<h1>Berechnung der Höhe basierend auf der Siedetemperatur</h1>
- 
-<label for="temp">Siedetemperatur in C:</label>
-<input type="number" id="temp" placeholder="z. B. 90">
-<button onclick="berechne()">Berechnen</button>
-
-<div id="ergebnis"></div>
-
-
+    <h1>Berechnung der Höhe basierend auf der Siedetemperatur</h1>
+    <label for="temp">Siedetemperatur in °C:</label>
+    <input type="number" id="temp" placeholder="z. B. 90">
+    <button onclick="berechne()">Berechnen</button>
+    <div id="ergebnis"></div>
 </body>
 </html>
