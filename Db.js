@@ -1,15 +1,13 @@
-// глобальные переменные
+
 let SQL = null;
 let db = null;
 
-// 1) Инициализация sql.js (скачивает sql-wasm.wasm с CDN)
 async function initSql() {
   SQL = await initSqlJs({
     locateFile: (f) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`,
   });
 }
 
-// 2) Загрузка .sqlite-файла в память браузера
 async function loadDatabase(fileName) {
   const res = await fetch(fileName);
   if (!res.ok) throw new Error(`Не удалось загрузить ${fileName}`);
@@ -18,7 +16,6 @@ async function loadDatabase(fileName) {
   renderTablesList();
 }
 
-// 3) Получить список таблиц и отрисовать
 function getTables() {
   const query = `
     SELECT name FROM sqlite_master
@@ -47,7 +44,7 @@ function renderTablesList() {
   runSelectAll(tables[0]);
 }
 
-// 4) Выполнение произвольного SQL (из textarea)
+
 function runSQL(sql) {
   try {
     const start = performance.now();
@@ -95,7 +92,7 @@ function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[c]));
 }
 
-// 7) Привязка UI
+
 async function main() {
   await initSql();
   const select = document.getElementById("dbSelect");
@@ -105,7 +102,7 @@ async function main() {
   reloadBtn.addEventListener("click", () => loadDatabase(select.value));
   runBtn.addEventListener("click", () => runSQL(document.getElementById("sql").value));
 
-  // автозагрузка первой базы при старте
+
   await loadDatabase(select.value);
 }
 main().catch(err => renderError(err.message));
